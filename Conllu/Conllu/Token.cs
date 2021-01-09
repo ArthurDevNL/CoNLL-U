@@ -8,14 +8,14 @@ namespace Conllu
     public class Token
     {
         /// <summary>
-        /// The main ID of the token. Quick accessor to <see cref="Index"/>
+        /// The main ID of the token. Quick accessor to <see cref="Identifier"/>
         /// </summary>
-        public int Id => Index.Id;
+        public int Id => Identifier.Id;
         
         /// <summary>
         /// The complex token index containing the ID, possible span ID or empty node ID
         /// </summary>
-        public TokenIndex Index { get; set; }
+        public TokenIdentifier Identifier { get; set; }
 
         /// <summary>
         /// Word form or punctuation symbol
@@ -65,7 +65,7 @@ namespace Conllu
         /// <summary>
         /// Enhanced dependency graph in the form of a list of head-deprel pairs
         /// </summary>
-        public Dictionary<TokenIndex, string> Deps { get; set; } = new Dictionary<TokenIndex, string>();
+        public Dictionary<TokenIdentifier, string> Deps { get; set; } = new Dictionary<TokenIdentifier, string>();
         
         /// <summary>
         /// Any other annotation
@@ -78,14 +78,14 @@ namespace Conllu
         public string RawLine { get; private set; }
 
         /// <summary>
-        /// Whether the token spans multiple words. Utility method for <see cref="Index"/>
+        /// Whether the token spans multiple words. Utility method for <see cref="Identifier"/>
         /// </summary>
-        public bool IsMultiwordToken => Index.IsMultiwordIndex;
+        public bool IsMultiwordToken => Identifier.IsMultiwordIndex;
 
         /// <summary>
-        /// Whether the token is an empty node. Utility method for <see cref="Index"/>
+        /// Whether the token is an empty node. Utility method for <see cref="Identifier"/>
         /// </summary>
-        public bool IsEmptyNode => Index.IsEmptyNode;
+        public bool IsEmptyNode => Identifier.IsEmptyNode;
         
         public override string ToString()
             => Form;
@@ -110,7 +110,7 @@ namespace Conllu
             // Create new token
             var t = new Token(line)
             {
-                Index = new TokenIndex(comps[0]),
+                Identifier = new TokenIdentifier(comps[0]),
                 Form = comps[1].ValueOrNull(),
                 Lemma = comps[2].ValueOrNull(),
                 Upos = comps[3].ValueOrNull(),
@@ -118,7 +118,7 @@ namespace Conllu
                 Feats = ParseMultiValueField(comps[5], "=", k => k, v => v),
                 Head = int.TryParse(comps[6], out var head) ? head : (int?)null,
                 DepRel = comps[7].ValueOrNull(),
-                Deps = ParseMultiValueField(comps[8], ":", k => new TokenIndex(k), v => v),
+                Deps = ParseMultiValueField(comps[8], ":", k => new TokenIdentifier(k), v => v),
                 Misc = comps[9].ValueOrNull(),
             };
 

@@ -4,7 +4,7 @@ using Conllu.Extensions;
 
 namespace Conllu
 {
-    public readonly struct Node<T>
+    internal readonly struct Node<T>
     {
         public readonly Node<T>[] Children { get; }
         

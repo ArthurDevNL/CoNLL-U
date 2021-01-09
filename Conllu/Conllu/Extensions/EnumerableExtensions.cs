@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Conllu.Extensions
 {
-    public static class EnumerableExtensions
+    internal static class EnumerableExtensions
     {
         public static bool IsNullOrEmpty<T>(this IEnumerable<T> list)
             => list == null || !list.Any();

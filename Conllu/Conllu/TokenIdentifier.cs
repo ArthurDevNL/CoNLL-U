@@ -2,7 +2,7 @@ using System.Collections;
 
 namespace Conllu
 {
-    public class TokenIndex
+    public class TokenIdentifier
     {
         /// <summary>
         /// The ID of the token
@@ -23,7 +23,7 @@ namespace Conllu
 
         public bool IsEmptyNode => SubId != null;
 
-        public TokenIndex(string index)
+        public TokenIdentifier(string index)
         {
             if (index.Contains("."))
             {

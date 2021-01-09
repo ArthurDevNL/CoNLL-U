@@ -4,7 +4,7 @@ using System.IO;
 
 namespace Conllu
 {
-    public class Conllu
+    public static class Conllu
     {
         public static IEnumerable<Sentence> ParseFile(string filePath)
             => Parse(File.ReadLines(filePath));
