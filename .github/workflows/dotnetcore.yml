@@ -19,8 +19,8 @@ jobs:
       run: dotnet restore
       working-directory: ./Conllu
     - name: Build
-      run: Conllu/dotnet build --configuration Release --no-restore
+      run: dotnet build --configuration Release --no-restore
       working-directory: ./Conllu
     - name: Test
-      run: Conllu/dotnet test --no-restore --verbosity normal
+      run: dotnet test --no-restore --verbosity normal
       working-directory: ./Conllu
