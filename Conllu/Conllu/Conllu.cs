@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace Conllu
 {
@@ -36,10 +35,17 @@ namespace Conllu
                     if (comps.Length == 2)
                         sentence.Metadata[comps[0].Trim()] = comps[1].Trim();
                 }
-                
-                var t = Token.FromLine(line);
-                if (t != null)
-                    sentence.Tokens.Add(t);
+
+                try
+                {
+                    var t = Token.FromLine(line);
+                    if (t != null)
+                        sentence.Tokens.Add(t);
+                }
+                catch (Exception e)
+                {
+                    throw new Exception($"Failed parsing line {i}: {e.Message}");
+                }
 
                 i += 1;
             }

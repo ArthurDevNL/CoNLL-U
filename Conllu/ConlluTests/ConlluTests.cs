@@ -45,11 +45,11 @@ namespace ConlluTests
             Assert.AreEqual("The quick brown fox jumps over the lazy dog.", s.Metadata["text"]);
         }
 
-        [Test]
+        // [Test]
         public void TestParseLargeFile()
         {
             var assembly = typeof(Tests).GetTypeInfo().Assembly;
-            var stream = assembly.GetManifestResourceStream("ConlluTests.Resources.TestMetadata.conllu");
+            var stream = assembly.GetManifestResourceStream("ConlluTests.Resources.en_ewt-ud-dev.conllu");
             // ReSharper disable once AssignNullToNotNullAttribute
             using var reader = new StreamReader(stream);
             var text = reader.ReadToEnd();
