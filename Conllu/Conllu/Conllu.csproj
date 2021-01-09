@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <PackageId>Conllu</PackageId>
+        <Authors>Arthur Hemmer</Authors>
+        <Description>A lightweight C# CoNNL-U parser.</Description>
+        <Copyright>Arthur Hemmer 2021</Copyright>
+        <PackageLicenseUrl>https://github.com/ArthurDevNL/CoNLL-Parser/blob/main/LICENSE</PackageLicenseUrl>
+        <RepositoryUrl>https://github.com/ArthurDevNL/CoNLL-Parser</RepositoryUrl>
+        <RepositoryType>Git</RepositoryType>
+        <PackageTags>CONLLU;NLP;PARSER</PackageTags>
+    </PropertyGroup>
+
+</Project>

@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conll", "Conll\Conll.csproj", "{91E9551B-23AA-4408-B25B-E194F39D9B60}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conllu", "Conllu\Conllu.csproj", "{91E9551B-23AA-4408-B25B-E194F39D9B60}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConlluTests", "ConlluTests\ConlluTests.csproj", "{BFDAAE38-AF39-406A-9E12-6DC9ECE50570}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -12,5 +14,9 @@ Global
 		{91E9551B-23AA-4408-B25B-E194F39D9B60}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{91E9551B-23AA-4408-B25B-E194F39D9B60}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{91E9551B-23AA-4408-B25B-E194F39D9B60}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFDAAE38-AF39-406A-9E12-6DC9ECE50570}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFDAAE38-AF39-406A-9E12-6DC9ECE50570}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFDAAE38-AF39-406A-9E12-6DC9ECE50570}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFDAAE38-AF39-406A-9E12-6DC9ECE50570}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
