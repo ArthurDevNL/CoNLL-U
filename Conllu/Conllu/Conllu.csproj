@@ -4,12 +4,14 @@
         <TargetFramework>netcoreapp3.1</TargetFramework>
         <PackageId>Conllu</PackageId>
         <Authors>Arthur Hemmer</Authors>
-        <Description>A lightweight C# CoNNL-U parser.</Description>
+        <Description>A lightweight C# CoNLL-U parser.</Description>
         <Copyright>Arthur Hemmer 2021</Copyright>
-        <PackageLicenseUrl>https://github.com/ArthurDevNL/CoNLL-Parser/blob/main/LICENSE</PackageLicenseUrl>
-        <RepositoryUrl>https://github.com/ArthurDevNL/CoNLL-Parser</RepositoryUrl>
+        <PackageLicenseUrl>https://github.com/ArthurDevNL/CoNLL-U/blob/main/LICENSE</PackageLicenseUrl>
+        <RepositoryUrl>https://github.com/ArthurDevNL/CoNLL-U</RepositoryUrl>
         <RepositoryType>Git</RepositoryType>
         <PackageTags>CONLLU;NLP;PARSER</PackageTags>
+        <Title>CoNLL-U</Title>
+        <PackageVersion>1.0.0</PackageVersion>
     </PropertyGroup>
 
 </Project>

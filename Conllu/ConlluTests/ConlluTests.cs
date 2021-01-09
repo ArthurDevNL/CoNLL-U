@@ -1,6 +1,7 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Conllu;
 using Conllu.Enums;
 using NUnit.Framework;
 
@@ -22,7 +23,7 @@ namespace ConlluTests
             using var reader = new StreamReader(stream);
             var text = reader.ReadToEnd();
             
-            var result = Conllu.Conllu.ParseText(text).ToList();
+            var result = ConlluParser.ParseText(text).ToList();
             Assert.AreEqual(1, result.Count);
 
             var sentence = result.First();
@@ -57,7 +58,7 @@ namespace ConlluTests
             // ReSharper disable once AssignNullToNotNullAttribute
             using var reader = new StreamReader(stream);
             var text = reader.ReadToEnd();
-            var result = Conllu.Conllu.ParseText(text).ToList();
+            var result = Conllu.ConlluParser.ParseText(text).ToList();
             Assert.AreEqual(1, result.Count);
 
             var s = result.First();
@@ -73,7 +74,7 @@ namespace ConlluTests
             // ReSharper disable once AssignNullToNotNullAttribute
             using var reader = new StreamReader(stream);
             var text = reader.ReadToEnd();
-            var result = Conllu.Conllu.ParseText(text).ToList();
+            var result = Conllu.ConlluParser.ParseText(text).ToList();
             Assert.AreEqual(2002, result.Count);
             Assert.IsTrue(result.All(x => !x.IsEmpty()));
         }

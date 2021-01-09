@@ -9,7 +9,7 @@ CoNLL-U is available as a NuGet package. Once installed, you can start as follow
 
 ```
 var filePath = ...
-var sentences = Conllu.ParseFile(filePath);
+var sentences = ConlluParser.ParseFile(filePath);
 ```
 
 Each `Sentence` contains a list of `Token` which contain all the information as specified in the CoNLL-U format. Below is a short overview of some of the fields that are available in the `Token` class:
