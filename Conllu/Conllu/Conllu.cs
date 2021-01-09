@@ -22,7 +22,7 @@ namespace Conllu
             foreach (var line in lines)
             {
                 // Finished reading sentence
-                if (line == "")
+                if (line == "" && !sentence.IsEmpty())
                 {
                     yield return sentence;
                     sentence = new Sentence();

@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using Conllu.Enums;
 using Conllu.Extensions;
 
@@ -10,15 +8,15 @@ namespace Conllu
     public class Token
     {
         /// <summary>
-        /// The ID of the token
+        /// The main ID of the token. Quick accessor to <see cref="Index"/>
         /// </summary>
-        public int Id { get; set; }
+        public int Id => Index.Id;
         
         /// <summary>
-        /// The end of the ID range in case of a multiword token
+        /// The complex token index containing the ID, possible span ID or empty node ID
         /// </summary>
-        public int? RangeId { get; set; }
-        
+        public TokenIndex Index { get; set; }
+
         /// <summary>
         /// Word form or punctuation symbol
         /// </summary>
@@ -67,7 +65,7 @@ namespace Conllu
         /// <summary>
         /// Enhanced dependency graph in the form of a list of head-deprel pairs
         /// </summary>
-        public Dictionary<int, string> Deps { get; set; } = new Dictionary<int, string>();
+        public Dictionary<TokenIndex, string> Deps { get; set; } = new Dictionary<TokenIndex, string>();
         
         /// <summary>
         /// Any other annotation
@@ -78,12 +76,17 @@ namespace Conllu
         /// The raw text line of the token
         /// </summary>
         public string RawLine { get; private set; }
-        
-        /// <summary>
-        /// Whether the token spans multiple words
-        /// </summary>
-        public bool IsMultiwordToken => RangeId != null;
 
+        /// <summary>
+        /// Whether the token spans multiple words. Utility method for <see cref="Index"/>
+        /// </summary>
+        public bool IsMultiwordToken => Index.IsMultiwordIndex;
+
+        /// <summary>
+        /// Whether the token is an empty node. Utility method for <see cref="Index"/>
+        /// </summary>
+        public bool IsEmptyNode => Index.IsEmptyNode;
+        
         public override string ToString()
             => Form;
 
@@ -102,29 +105,23 @@ namespace Conllu
             
             // Invalid number of fields
             if (comps.Length != 10)
-                return null;
+                throw new Exception($"Invalid number of fields ({comps.Length}, should be 10) found for token line '{line}'.");
 
             // Create new token
-            var t = new Token(line);
-            
-            var index = comps[0].Split("-");
-            t.Id = int.Parse(index[0]);
-            if (index.Length == 2)
-                t.RangeId = int.Parse(index[1]);
+            var t = new Token(line)
+            {
+                Index = new TokenIndex(comps[0]),
+                Form = comps[1].ValueOrNull(),
+                Lemma = comps[2].ValueOrNull(),
+                Upos = comps[3].ValueOrNull(),
+                Xpos = comps[4].ValueOrNull(),
+                Feats = ParseMultiValueField(comps[5], "=", k => k, v => v),
+                Head = int.TryParse(comps[6], out var head) ? head : (int?)null,
+                DepRel = comps[7].ValueOrNull(),
+                Deps = ParseMultiValueField(comps[8], ":", k => new TokenIndex(k), v => v),
+                Misc = comps[9].ValueOrNull(),
+            };
 
-            t.Form = comps[1].ValueOrNull();
-            t.Lemma = comps[2].ValueOrNull();
-            t.Upos = comps[3].ValueOrNull();
-            t.Xpos = comps[4].ValueOrNull();
-            t.Feats = ParseMultiValueField(comps[5], "=", k => k, v => v);
-
-            if (int.TryParse(comps[6], out var head))
-                t.Head = head;
-
-            t.DepRel = comps[7].ValueOrNull();
-            t.Deps = ParseMultiValueField(comps[8], ":", int.Parse, v => v);
-            t.Misc = comps[9].ValueOrNull();
-            
             return t;
         }
 
