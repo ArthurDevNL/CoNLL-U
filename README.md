@@ -1,5 +1,5 @@
 # CoNLL-U Parser in .NET Core
-![.NET Core](https://github.com/ArthurDevNL/CoNLLU-Parser/workflows/.NET%20Core/badge.svg?branch=main)
+![.NET Core](https://github.com/ArthurDevNL/CoNLLU-Parser/workflows/.NET%20Core/badge.svg?branch=main) ![Nuget](https://img.shields.io/nuget/v/conllu) ![GitHub](https://img.shields.io/github/license/arthurdevnl/conll-u)
 
 This repository contains a lightweight, well-tested CoNLL-U parser written in C# .NET Core and parses according to the CoNLL-U format as specified by [Universal Dependencies](https://universaldependencies.org/format.html).
 
