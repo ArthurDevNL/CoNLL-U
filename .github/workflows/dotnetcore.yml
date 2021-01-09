@@ -1,0 +1,23 @@
+name: .NET Core
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.110
+    - name: Install dependencies
+      run: Conllu/dotnet restore
+    - name: Build
+      run: Conllu/dotnet build --configuration Release --no-restore
+    - name: Test
+      run: Conllu/dotnet test --no-restore --verbosity normal
