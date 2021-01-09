@@ -40,6 +40,8 @@ Each `Sentence` contains a list of `Token` which contain all the information as 
 In addition, there is a `TokenIdentifier` class which wraps the different possibilities for word ID such as multiword tokens or empty nodes.
 
 ## To-do
+Below is a list of items that are still planned for the package. Feel free to open an issue or pull request for any other additional functionalities and/or bugfixes.
+
 - [x] Support empty nodes
 - [ ] Add tree parsing helper functions
 - [ ] Add serialization support to generate .conllu files
