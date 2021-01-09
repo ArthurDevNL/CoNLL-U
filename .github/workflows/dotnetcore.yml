@@ -16,8 +16,11 @@ jobs:
       with:
         dotnet-version: 3.1.110
     - name: Install dependencies
-      run: Conllu/dotnet restore
+      run: dotnet restore
+      working-directory: ./Conllu
     - name: Build
       run: Conllu/dotnet build --configuration Release --no-restore
+      working-directory: ./Conllu
     - name: Test
       run: Conllu/dotnet test --no-restore --verbosity normal
+      working-directory: ./Conllu
