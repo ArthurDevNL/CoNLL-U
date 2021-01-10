@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Conllu.Enums;
 using Conllu.Extensions;
 
@@ -90,11 +91,11 @@ namespace Conllu
         public override string ToString()
             => Form;
 
-        public Token(string line)
+        public Token()
         {
-            RawLine = line;
+            
         }
-        
+
         public static Token FromLine(string line)
         {
             // Comment or empty line
@@ -108,7 +109,7 @@ namespace Conllu
                 throw new Exception($"Invalid number of fields ({comps.Length}, should be 10) found for token line '{line}'.");
 
             // Create new token
-            var t = new Token(line)
+            var t = new Token()
             {
                 Identifier = new TokenIdentifier(comps[0]),
                 Form = comps[1].ValueOrNull(),
@@ -120,9 +121,28 @@ namespace Conllu
                 DepRel = comps[7].ValueOrNull(),
                 Deps = ParseMultiValueField(comps[8], ":", k => new TokenIdentifier(k), v => v),
                 Misc = comps[9].ValueOrNull(),
+                RawLine = line
             };
 
             return t;
+        }
+
+        public string Serialize()
+        {
+            var items = new List<string>
+            {
+                Identifier.Serialize(),
+                Form.ValueOrUnderscore(),
+                Lemma.ValueOrUnderscore(),
+                Upos.ValueOrUnderscore(),
+                Xpos.ValueOrUnderscore(),
+                Feats.IsNullOrEmpty() ? "_" : string.Join('|', Feats.Select(kvp => $"{kvp.Key}={kvp.Value}")),
+                Head?.ToString().ValueOrUnderscore(),
+                DepRel.ValueOrUnderscore(),
+                Deps.IsNullOrEmpty() ? "_" : string.Join('|', Deps.Select(kvp => $"{kvp.Key.Serialize()}:{kvp.Value}")),
+                Misc.ValueOrUnderscore()
+            };
+            return string.Join('\t', items);
         }
 
         private static Dictionary<TKey, TValue> ParseMultiValueField<TKey, TValue>(string field, string keyValueSeparator, Func<string, TKey> keyConverter, Func<string, TValue> valueConverter)

@@ -1,20 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Conllu
 {
     public static class ConlluParser
     {
+        /// <summary>
+        /// Read and parse a CoNLL-U file
+        /// </summary>
+        /// <param name="filePath">The path to the file to read</param>
+        /// <returns>An enumerable of sentences parsed from the file</returns>
         public static IEnumerable<Sentence> ParseFile(string filePath)
             => Parse(File.ReadLines(filePath));
         
+        /// <summary>
+        /// Parse the given string
+        /// </summary>
+        /// <param name="text">The text to parse (should be in CoNLL-U format)</param>
+        /// <returns>An enumerable of sentences parsed from the text</returns>
         public static IEnumerable<Sentence> ParseText(string text)
             => Parse(text.Split(
                 new[] {"\r\n", "\r", "\n"},
                 StringSplitOptions.None
             ));
 
+        /// <summary>
+        /// Parses an enumerable of lines to an enumerable of sentences
+        /// </summary>
+        /// <param name="lines">The individual lines of the CoNLL-U data to parse</param>
+        /// <returns>An enumerable of sentences parsed from the input</returns>
+        /// <exception cref="Exception">When the input data cannot be parsed correctly (invalid format)</exception>
         public static IEnumerable<Sentence> Parse(IEnumerable<string> lines)
         {
             var i = 0;
@@ -53,5 +70,13 @@ namespace Conllu
             if (!sentence.IsEmpty())
                 yield return sentence;
         }
+
+        /// <summary>
+        /// Serializes an enumerable of sentences into a string that can be written to a CoNLL-U file.
+        /// </summary>
+        /// <param name="sentences">The sentences to serialize</param>
+        /// <returns>The given sentences in a CoNLL-U text format</returns>
+        public static string Serialize(IEnumerable<Sentence> sentences)
+            => string.Join('\n', sentences.Select(s => s.Serialize()));
     }
 }

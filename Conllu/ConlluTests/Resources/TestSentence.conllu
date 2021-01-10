@@ -9,3 +9,4 @@
 8	lazy	lazy	ADJ	JJ	Degree=Pos	9	amod	_	_
 9	dog	dog	NOUN	NN	Number=Sing	5	nmod	_	SpaceAfter=No
 10	.	.	PUNCT	.	_	5	punct	_	_
+

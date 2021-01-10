@@ -23,6 +23,10 @@ namespace Conllu
 
         public bool IsEmptyNode => SubId != null;
 
+        /// <summary>
+        /// Parses a new token identifier
+        /// </summary>
+        /// <param name="index">Should either be a single integer, or two integers separated by a dash or a dot (1, 1-2, 1.2)</param>
         public TokenIdentifier(string index)
         {
             if (index.Contains("."))
@@ -41,6 +45,16 @@ namespace Conllu
             {
                 Id = int.Parse(index);
             }
+        }
+
+        public string Serialize()
+        {
+            if (IsMultiwordIndex)
+                return $"{Id}-{SpanId}";
+            if (IsEmptyNode)
+                return $"{Id}.{SubId}";
+
+            return $"{Id}";
         }
     }
 }

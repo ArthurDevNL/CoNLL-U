@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,5 +17,26 @@ namespace Conllu
         public Dictionary<string, string> Metadata { get; } = new Dictionary<string, string>();
         
         public bool IsEmpty() => !Tokens.Any();
+
+        public Sentence()
+        {
+            
+        }
+
+        public Sentence(List<Token> tokens, Dictionary<string, string> metadata = null)
+        {
+            Tokens = tokens;
+            Metadata = metadata ?? new Dictionary<string, string>();
+        }
+
+        public string Serialize()
+        {
+            var result = "";
+            result += string.Join('\n', Metadata.Select(kvp => $"# {kvp.Key} = {kvp.Value}"));
+            result += "\n";
+            result += string.Join('\n', Tokens.Select(t => t.Serialize()));
+            result += "\n\n";
+            return result;
+        }
     }
 }
