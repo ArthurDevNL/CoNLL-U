@@ -43,8 +43,8 @@ In addition, there is a `TokenIdentifier` class which wraps the different possib
 Below is a list of items that are still planned for the package. Feel free to open an issue or pull request for any other additional functionalities and/or bugfixes.
 
 - [x] Support empty nodes
+- [x] Add serialization support to generate .conllu files
 - [ ] Add tree parsing helper functions
-- [ ] Add serialization support to generate .conllu files
 
 ## License
 
