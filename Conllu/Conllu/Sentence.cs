@@ -1,6 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using Conllu.Enums;
 
 namespace Conllu
 {
@@ -27,6 +27,12 @@ namespace Conllu
         {
             Tokens = tokens;
             Metadata = metadata ?? new Dictionary<string, string>();
+        }
+
+        public Tree<Token, DependencyRelation> AsDependencyTree()
+        {
+            // TODO
+            return null;
         }
 
         public string Serialize()
