@@ -1,8 +1,8 @@
-using System.Collections;
+using System;
 
 namespace Conllu
 {
-    public class TokenIdentifier
+    public class TokenIdentifier: IComparable<TokenIdentifier>
     {
         /// <summary>
         /// The ID of the token
@@ -55,6 +55,47 @@ namespace Conllu
                 return $"{Id}.{SubId}";
 
             return $"{Id}";
+        }
+        
+        /// <summary>
+        /// Tokens are sorted by their ID. Between tokens with the same ID, the order is: multi word (by span id), ID and them empty nodes bu sub ID.
+        /// </summary>
+        public int CompareTo(TokenIdentifier other)
+        {
+            if (Id == other.Id)
+            {
+                if (IsMultiwordIndex)
+                {
+                    if (other.IsMultiwordIndex && SpanId.HasValue && other.SpanId.HasValue)
+                        return SpanId.Value.CompareTo(other.SpanId.Value);
+                    return -1; // The other is not a multi word
+                }
+
+                if (IsEmptyNode)
+                {
+                    if (other.IsEmptyNode && SubId.HasValue && other.SubId.HasValue)
+                        return SubId.Value.CompareTo(other.SubId.Value);
+                    return 1; // The other is not an empty node
+                }
+
+                return 0;
+            }
+
+            return Id.CompareTo(other.Id);
+        }
+
+        /// <summary>
+        /// Returns whether the id is the same or in the range of the span in case of a multi word index
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public bool IsInRange(int id)
+        {
+            if (!IsMultiwordIndex)
+                return id == Id;
+
+            // ReSharper disable once PossibleInvalidOperationException
+            return id >= Id && id <= SpanId.Value;
         }
     }
 }

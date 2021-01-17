@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Conllu.Extensions;
 
 namespace Conllu
 {
@@ -21,10 +22,7 @@ namespace Conllu
         /// <param name="text">The text to parse (should be in CoNLL-U format)</param>
         /// <returns>An enumerable of sentences parsed from the text</returns>
         public static IEnumerable<Sentence> ParseText(string text)
-            => Parse(text.Split(
-                new[] {"\r\n", "\r", "\n"},
-                StringSplitOptions.None
-            ));
+            => Parse(text.SplitLines());
 
         /// <summary>
         /// Parses an enumerable of lines to an enumerable of sentences

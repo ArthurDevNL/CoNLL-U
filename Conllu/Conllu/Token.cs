@@ -6,7 +6,7 @@ using Conllu.Extensions;
 
 namespace Conllu
 {
-    public class Token
+    public class Token: IComparable<Token>
     {
         /// <summary>
         /// The main ID of the token. Quick accessor to <see cref="Identifier"/>
@@ -87,7 +87,12 @@ namespace Conllu
         /// Whether the token is an empty node. Utility method for <see cref="Identifier"/>
         /// </summary>
         public bool IsEmptyNode => Identifier.IsEmptyNode;
-        
+
+        public int CompareTo(Token other)
+        {
+            return Identifier.CompareTo(other.Identifier);
+        }
+
         public override string ToString()
             => Form;
 
