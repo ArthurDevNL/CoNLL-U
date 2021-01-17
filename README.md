@@ -51,7 +51,7 @@ Below is a list of items that are still planned for the package. Feel free to op
 
 - [x] Support empty nodes
 - [x] Add serialization support to generate .conllu files
-- [ ] Add tree parsing helper functions
+- [x] Add tree parsing helper functions
 
 ## License
 
