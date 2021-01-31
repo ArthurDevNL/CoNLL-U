@@ -36,10 +36,13 @@ namespace Conllu
         /// <returns></returns>
         public Tree<Token, DependencyRelation> AsDependencyTree()
         {
-            var map = RawTokens().ToDictionary(t => t.Id, t => new Tree<Token, DependencyRelation>(t));
+            var map = RawTokens().ToDictionary(t => t.Id, t => t.DepRelEnum.HasValue ? new Tree<Token, DependencyRelation>(t, t.DepRelEnum.Value) : null);
             Tree<Token, DependencyRelation> root = null;
             foreach (var (id, node) in map)
             {
+                if (node == null)
+                    continue;
+                
                 if (node.Value.Head == 0 || node.Value.DepRelEnum == DependencyRelation.Root)
                 {
                     root = node;
@@ -50,7 +53,7 @@ namespace Conllu
                     continue;
 
                 var parent = map[node.Value.Head.Value];
-                parent.AddChild(node, node.Value.DepRelEnum.Value);
+                parent.AddChild(node);
             }
             
             return root;

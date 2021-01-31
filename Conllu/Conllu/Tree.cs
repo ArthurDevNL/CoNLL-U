@@ -8,23 +8,24 @@ namespace Conllu
     public class Tree<TVertex, TConnection>: IComparable<Tree<TVertex, TConnection>>
         where TVertex: IComparable<TVertex>
     {
-        public SortedDictionary<Tree<TVertex, TConnection>, TConnection> Connections { get; }
-
-        public IEnumerable<Tree<TVertex, TConnection>> Children => Connections.Keys;
+        public List<Tree<TVertex, TConnection>> Children { get; set; }
         
         public TVertex Value { get; set; }
+        
+        public TConnection Connection { get; set; }
 
-        public bool IsLeaf => Connections.IsNullOrEmpty();
+        public bool IsLeaf => Children.IsNullOrEmpty();
 
-        public Tree(TVertex value, SortedDictionary<Tree<TVertex, TConnection>, TConnection> connections = null)
+        public Tree(TVertex value, TConnection connection, List<Tree<TVertex, TConnection>> connections = null)
         {
             Value = value;
-            Connections = connections ?? new SortedDictionary<Tree<TVertex, TConnection>, TConnection>();
+            Connection = connection;
+            Children = connections ?? new List<Tree<TVertex, TConnection>>();
         }
 
-        public void AddChild(Tree<TVertex, TConnection> child, TConnection connection)
+        public void AddChild(Tree<TVertex, TConnection> child)
         {
-            Connections.Add(child, connection);
+            Children.Add(child);
         }
 
         /// <summary>
@@ -77,18 +78,18 @@ namespace Conllu
 
         public override string ToString()
         {
-            var s = $"{Value.ToString()}";
-            return Connections.Aggregate(s, (current, kvp) => current + kvp.Key.ToString(1, kvp.Value));
+            var s = $"{Value.ToString()} ({Connection})";
+            return Children.Aggregate(s, (current, kvp) => current + kvp.ToString(1));
         }
         
-        private string ToString(int depth, TConnection connection)
+        private string ToString(int depth)
         {
             var prefix = new string('\t', depth);
             if (IsLeaf)
-                return $"\n{prefix}{Value.ToString()} ({connection})";
+                return $"\n{prefix}{Value.ToString()} ({Connection})";
 
-            var result = depth == 0 ? $"{prefix}{Value.ToString()} ({connection})" : $"\n{prefix}{Value.ToString()} ({connection})";
-            return Connections.Aggregate(result, (current, kvp) => current + kvp.Key.ToString(depth + 1, kvp.Value));
+            var result = depth == 0 ? $"{prefix}{Value.ToString()} ({Connection})" : $"\n{prefix}{Value.ToString()} ({Connection})";
+            return Children.Aggregate(result, (current, kvp) => current + kvp.ToString(depth + 1));
         }
     }
 }

@@ -175,7 +175,7 @@ namespace ConlluTests
             var result = ConlluParser.ParseText(text).ToList();
 
             var s = result[150];
-            Assert.AreEqual(4, s.AsDependencyTree().Children.Count());
+            Assert.AreEqual(4, s.AsDependencyTree().Children.Count);
         }
     }
 }
