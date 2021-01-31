@@ -36,7 +36,7 @@ namespace Conllu
         /// <summary>
         /// A parsed enum version of the Upos field
         /// </summary>
-        public PosTag? UposEnum => Enum.TryParse<PosTag>(Upos, true, out var tag) ? tag : (PosTag?) null;
+        public PosTag? UposEnum { get; set; }
         
         /// <summary>
         /// Language-specific part-of-speech tag
@@ -54,14 +54,19 @@ namespace Conllu
         public int? Head { get; set; }
         
         /// <summary>
-        /// Universal dependency relation to the HEAD (root iff HEAD = 0) or a defined language-specific subtype of one
+        /// Universal dependency relation to the HEAD (root if HEAD = 0) or a defined language-specific subtype of one
         /// </summary>
         public string DepRel { get; set; }
 
         /// <summary>
         /// A parsed enum version of DepRel
         /// </summary>
-        public DependencyRelation? DepRelEnum => Enum.TryParse<DependencyRelation>(DepRel, true, out var r) ? r : (DependencyRelation?) null;
+        public DependencyRelation? DepRelEnum { get; set; }
+
+        /// <summary>
+        /// The subtype of the dependency relation if any (eg nsubj:pass => pass is the subtype)
+        /// </summary>
+        public string DepRelSubtype { get; set; }
 
         /// <summary>
         /// Enhanced dependency graph in the form of a list of head-deprel pairs
@@ -112,9 +117,9 @@ namespace Conllu
             // Invalid number of fields
             if (comps.Length != 10)
                 throw new Exception($"Invalid number of fields ({comps.Length}, should be 10) found for token line '{line}'.");
-
+            
             // Create new token
-            var t = new Token()
+            var t = new Token
             {
                 Identifier = new TokenIdentifier(comps[0]),
                 Form = comps[1].ValueOrNull(),
@@ -128,7 +133,17 @@ namespace Conllu
                 Misc = comps[9].ValueOrNull(),
                 RawLine = line
             };
-
+            
+            var depRel = comps[7];
+            if (depRel.Contains(":"))
+            {
+                var depRelComps = depRel.Split(":").ToList(); 
+                depRel = depRelComps[0];
+                t.DepRelSubtype = depRelComps[1];
+            }
+            t.DepRelEnum = Enum.TryParse<DependencyRelation>(depRel, true, out var r) ? r : (DependencyRelation?) null;
+            t.UposEnum = Enum.TryParse<PosTag>(t.Upos, true, out var tag) ? tag : (PosTag?) null;
+            
             return t;
         }
 

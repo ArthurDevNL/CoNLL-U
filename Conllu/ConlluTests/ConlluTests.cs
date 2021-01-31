@@ -60,7 +60,7 @@ namespace ConlluTests
             // ReSharper disable once AssignNullToNotNullAttribute
             using var reader = new StreamReader(stream);
             var text = reader.ReadToEnd();
-            var result = Conllu.ConlluParser.ParseText(text).ToList();
+            var result = ConlluParser.ParseText(text).ToList();
             Assert.AreEqual(1, result.Count);
 
             var s = result.First();
@@ -76,7 +76,7 @@ namespace ConlluTests
             // ReSharper disable once AssignNullToNotNullAttribute
             using var reader = new StreamReader(stream);
             var text = reader.ReadToEnd();
-            var result = Conllu.ConlluParser.ParseText(text).ToList();
+            var result = ConlluParser.ParseText(text).ToList();
             Assert.AreEqual(2002, result.Count);
             Assert.IsTrue(result.All(x => !x.IsEmpty()));
             Assert.IsTrue(result.All(s => s.AsDependencyTree() != null));
@@ -162,6 +162,20 @@ namespace ConlluTests
             });
 
             Assert.AreEqual("The quick brown fox jumps over the lazy dog.", sentence.RawTokenSequence());
+        }
+
+        [Test]
+        public void TestDependencyTreeSubTypes()
+        {
+            var assembly = typeof(Tests).GetTypeInfo().Assembly;
+            var stream = assembly.GetManifestResourceStream("ConlluTests.Resources.en_ewt-ud-dev.conllu");
+            // ReSharper disable once AssignNullToNotNullAttribute
+            using var reader = new StreamReader(stream);
+            var text = reader.ReadToEnd();
+            var result = ConlluParser.ParseText(text).ToList();
+
+            var s = result[150];
+            Assert.AreEqual(4, s.AsDependencyTree().Children.Count());
         }
     }
 }
