@@ -177,5 +177,50 @@ namespace ConlluTests
             var s = result[150];
             Assert.AreEqual(4, s.AsDependencyTree().Children.Count);
         }
+
+        [Test]
+        public void TestCompareTokenIdentifiers()
+        {
+            var ti1 = new TokenIdentifier("1");
+            var ti2 = new TokenIdentifier("2");
+            Assert.IsTrue(ti1 < ti2);
+            Assert.IsTrue(ti2 > ti1);
+            Assert.IsTrue(ti1 <= ti2);
+            Assert.IsTrue(ti2 >= ti1);
+            Assert.IsFalse(ti1 == ti2);
+
+            var ti13 = new TokenIdentifier("1-3");
+            var ti4 = new TokenIdentifier("4.1");
+            Assert.IsTrue(ti13.IsInRange(ti2.Id));
+            Assert.IsFalse(ti13.IsInRange(ti4.Id));
+            Assert.IsTrue(ti13.IsMultiwordIndex);
+
+            var ti14 = new TokenIdentifier("1-4");
+            Assert.IsTrue(ti14 != ti13);
+
+            var ti42 = new TokenIdentifier("4.2");
+            Assert.IsTrue(ti4 != ti42);
+            Assert.IsTrue(ti4 != ti1);
+            
+            Assert.AreNotEqual(ti1, ti2);
+            Assert.IsFalse(ti1.Equals(ti2));
+            
+            var ti1Again = new TokenIdentifier("1");
+            Assert.AreEqual(ti1, ti1Again);
+            Assert.IsTrue(ti1.Equals(ti1Again));
+        }
+
+        [Test]
+        public void TestIdentifierSerialize()
+        {
+            var ti1 = new TokenIdentifier("1");
+            Assert.AreEqual(ti1.Serialize(), "1");
+            
+            var ti13 = new TokenIdentifier("1-3");
+            Assert.AreEqual(ti13.Serialize(), "1-3");
+            
+            var ti4 = new TokenIdentifier("4.1");
+            Assert.AreEqual(ti4.Serialize(), "4.1");
+        }
     }
 }

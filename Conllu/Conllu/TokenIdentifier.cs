@@ -4,6 +4,23 @@ namespace Conllu
 {
     public class TokenIdentifier: IComparable<TokenIdentifier>
     {
+        public bool Equals(TokenIdentifier other)
+        {
+            return Id == other.Id && SpanId == other.SpanId && SubId == other.SubId;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            return obj.GetType() == GetType() && Equals((TokenIdentifier)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Id, SpanId, SubId);
+        }
+
         /// <summary>
         /// The ID of the token
         /// </summary>
@@ -83,6 +100,24 @@ namespace Conllu
 
             return Id.CompareTo(other.Id);
         }
+
+        public static bool operator >(TokenIdentifier li, TokenIdentifier ri)
+            => li.CompareTo(ri) > 0;
+
+        public static bool operator <(TokenIdentifier li, TokenIdentifier ri)
+            => li.CompareTo(ri) < 0;
+
+        public static bool operator >=(TokenIdentifier li, TokenIdentifier ri)
+            => li.CompareTo(ri) >= 0;
+
+        public static bool operator <=(TokenIdentifier li, TokenIdentifier ri)
+            => li.CompareTo(ri) <= 0;
+
+        public static bool operator ==(TokenIdentifier li, TokenIdentifier ri)
+            => li.CompareTo(ri) == 0;
+
+        public static bool operator !=(TokenIdentifier li, TokenIdentifier ri)
+            => li.CompareTo(ri) != 0;
 
         /// <summary>
         /// Returns whether the id is the same or in the range of the span in case of a multi word index
