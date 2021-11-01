@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <TargetFramework>net5.0</TargetFramework>
         <PackageId>Conllu</PackageId>
         <Authors>Arthur Hemmer</Authors>
         <Description>A lightweight C# CoNLL-U parser.</Description>
@@ -11,7 +11,7 @@
         <RepositoryType>Git</RepositoryType>
         <PackageTags>CONLLU;NLP;PARSER</PackageTags>
         <Title>CoNLL-U</Title>
-        <PackageVersion>1.1</PackageVersion>
+        <PackageVersion>1.1.1</PackageVersion>
     </PropertyGroup>
 
 </Project>

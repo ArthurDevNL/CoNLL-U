@@ -7,17 +7,17 @@ namespace Conllu
         /// <summary>
         /// The ID of the token
         /// </summary>
-        public int Id { get; set; }
+        public int Id { get; init; }
         
         /// <summary>
         /// In the case of a span ID (e.g. 1-2 or 3-5), the span ID is the second number of the ID
         /// </summary>
-        public int? SpanId { get; set; }
+        public int? SpanId { get; init; }
         
         /// <summary>
         /// In the case of an empty node ID (e.g. 1.2 or 3.5), the sub ID is the second number in the ID  
         /// </summary>
-        public int? SubId { get; set; }
+        public int? SubId { get; init; }
         
         public bool IsMultiwordIndex => SpanId != null;
 
@@ -83,6 +83,37 @@ namespace Conllu
 
             return Id.CompareTo(other.Id);
         }
+        
+        public override bool Equals(object? obj)
+        {
+            if (obj is TokenIdentifier ti)
+                return CompareTo(ti) == 0;
+            
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Id, SpanId, SubId);
+        }
+
+        public static bool operator >(TokenIdentifier li, TokenIdentifier ri)
+            => li?.CompareTo(ri) > 0;
+
+        public static bool operator <(TokenIdentifier li, TokenIdentifier ri)
+            => li?.CompareTo(ri) < 0;
+
+        public static bool operator >=(TokenIdentifier li, TokenIdentifier ri)
+            => li?.CompareTo(ri) >= 0;
+
+        public static bool operator <=(TokenIdentifier li, TokenIdentifier ri)
+            => li?.CompareTo(ri) <= 0;
+
+        public static bool operator ==(TokenIdentifier li, TokenIdentifier ri)
+            => li?.CompareTo(ri) == 0;
+
+        public static bool operator !=(TokenIdentifier li, TokenIdentifier ri)
+            => li?.CompareTo(ri) != 0;
 
         /// <summary>
         /// Returns whether the id is the same or in the range of the span in case of a multi word index

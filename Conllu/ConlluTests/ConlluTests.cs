@@ -177,5 +177,117 @@ namespace ConlluTests
             var s = result[150];
             Assert.AreEqual(4, s.AsDependencyTree().Children.Count);
         }
+
+        [Test]
+        public void TestCompareTokenIdentifiers()
+        {
+            var ti1 = new TokenIdentifier("1");
+            var ti2 = new TokenIdentifier("2");
+            Assert.IsTrue(ti1 < ti2);
+            Assert.IsTrue(ti2 > ti1);
+            Assert.IsTrue(ti1 <= ti2);
+            Assert.IsTrue(ti2 >= ti1);
+            Assert.IsFalse(ti1 == ti2);
+
+            var ti13 = new TokenIdentifier("1-3");
+            var ti4 = new TokenIdentifier("4.1");
+            Assert.IsTrue(ti13.IsInRange(ti2.Id));
+            Assert.IsFalse(ti13.IsInRange(ti4.Id));
+            Assert.IsTrue(ti13.IsMultiwordIndex);
+
+            var ti14 = new TokenIdentifier("1-4");
+            Assert.IsTrue(ti14 != ti13);
+
+            var ti42 = new TokenIdentifier("4.2");
+            Assert.IsTrue(ti4 != ti42);
+            Assert.IsTrue(ti4 != ti1);
+            
+            Assert.AreNotEqual(ti1, ti2);
+            Assert.IsFalse(ti1.Equals(ti2));
+            
+            var ti1Again = new TokenIdentifier("1");
+            Assert.AreEqual(ti1, ti1Again);
+            Assert.IsTrue(ti1.Equals(ti1Again));
+        }
+
+        [Test]
+        public void TestIdentifierSerialize()
+        {
+            var ti1 = new TokenIdentifier("1");
+            Assert.AreEqual(ti1.Serialize(), "1");
+            
+            var ti13 = new TokenIdentifier("1-3");
+            Assert.AreEqual(ti13.Serialize(), "1-3");
+            
+            var ti4 = new TokenIdentifier("4.1");
+            Assert.AreEqual(ti4.Serialize(), "4.1");
+        }
+
+        [Test]
+        public void TestTreeEquality()
+        {
+            var s1 = new Sentence(new List<Token>
+            {
+                Token.FromLine("1	The	the	DET	DT	Definite=Def|PronType=Art	4	det	_	_"),
+                Token.FromLine("2	quick	quick	ADJ	JJ	Degree=Pos	4	amod	_	_"),
+                Token.FromLine("3	brown	brown	ADJ	JJ	Degree=Pos	4	amod	_	_"),
+                Token.FromLine("4	fox	fox	NOUN	NN	Number=Sing	5	nsubj	_	_"),
+                Token.FromLine("5	jumps	jump	VERB	VBZ	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	0	root	_	_"),
+                Token.FromLine("6	over	over	ADP	IN	_	9	case	_	_"),
+                Token.FromLine("7	the	the	DET	DT	Definite=Def|PronType=Art	9	det	_	_"),
+                Token.FromLine("8	lazy	lazy	ADJ	JJ	Degree=Pos	9	amod	_	_"),
+                Token.FromLine("9	dog	dog	NOUN	NN	Number=Sing	5	nmod	_	SpaceAfter=No"),
+                Token.FromLine("10	.	.	PUNCT	.	_	5	punct	_	_")
+            });
+            
+            var s2 = new Sentence(new List<Token>
+            {
+                Token.FromLine("1	The	the	DET	DT	Definite=Def|PronType=Art	4	det	_	_"),
+                Token.FromLine("2	quick	quick	ADJ	JJ	Degree=Pos	4	amod	_	_"),
+                Token.FromLine("3	brown	brown	ADJ	JJ	Degree=Pos	4	amod	_	_"),
+                Token.FromLine("4	fox	fox	NOUN	NN	Number=Sing	5	nsubj	_	_"),
+                Token.FromLine("5	jumps	jump	VERB	VBZ	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	0	root	_	_"),
+                Token.FromLine("6	over	over	ADP	IN	_	9	case	_	_"),
+                Token.FromLine("7	the	the	DET	DT	Definite=Def|PronType=Art	9	det	_	_"),
+                Token.FromLine("8	lazy	lazy	ADJ	JJ	Degree=Pos	9	amod	_	_"),
+                Token.FromLine("9	dog	dog	NOUN	NN	Number=Sing	5	nmod	_	SpaceAfter=No"),
+                Token.FromLine("10	.	.	PUNCT	.	_	5	punct	_	_")
+            });
+            
+            var s1Tree = s1.AsDependencyTree();
+            var s2Tree = s2.AsDependencyTree();
+            Assert.IsTrue(s1Tree.Equals(s2Tree));
+
+            var t = Token.FromLine("11	test	test	ADJ	JJ	Degree=Pos	9	amod	_	_");
+            s1Tree.AddChild(new Tree<Token, DependencyRelation>(t, DependencyRelation.Cc));
+            Assert.IsFalse(s1Tree.Equals(s2Tree));
+        }
+
+        [Test]
+        public void TestTreeWhere()
+        {
+            var s1 = new Sentence(new List<Token>
+            {
+                Token.FromLine("1	The	the	DET	DT	Definite=Def|PronType=Art	4	det	_	_"),
+                Token.FromLine("2	quick	quick	ADJ	JJ	Degree=Pos	4	amod	_	_"),
+                Token.FromLine("3	brown	brown	ADJ	JJ	Degree=Pos	4	amod	_	_"),
+                Token.FromLine("4	fox	fox	NOUN	NN	Number=Sing	5	nsubj	_	_"),
+                Token.FromLine("5	jumps	jump	VERB	VBZ	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	0	root	_	_"),
+                Token.FromLine("6	over	over	ADP	IN	_	9	case	_	_"),
+                Token.FromLine("7	the	the	DET	DT	Definite=Def|PronType=Art	9	det	_	_"),
+                Token.FromLine("8	lazy	lazy	ADJ	JJ	Degree=Pos	9	amod	_	_"),
+                Token.FromLine("9	dog	dog	NOUN	NN	Number=Sing	5	nmod	_	SpaceAfter=No"),
+                Token.FromLine("10	.	.	PUNCT	.	_	5	punct	_	_")
+            });
+            var s1Tree = s1.AsDependencyTree();
+
+            var over = s1Tree.WhereBfs(x => x.Form == "over").FirstOrDefault();
+            Assert.IsNotNull(over);
+            Assert.AreEqual(over.Value.Id, 6);
+
+            var lazy = s1Tree.WhereDfs(x => x.DepRelEnum == DependencyRelation.Amod).FirstOrDefault();
+            Assert.IsNotNull(lazy);
+            Assert.AreEqual(lazy.Value.Id, 8);
+        }
     }
 }

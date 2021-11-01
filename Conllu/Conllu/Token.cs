@@ -46,7 +46,7 @@ namespace Conllu
         /// <summary>
         /// List of morphological features from the universal feature inventory or from a defined language-specific extension
         /// </summary>
-        public Dictionary<string, string> Feats { get; set; } = new Dictionary<string, string>();
+        public Dictionary<string, string> Feats { get; set; } = new();
         
         /// <summary>
         /// Head of the current word, which is either a value of ID or zero (0)
@@ -71,7 +71,7 @@ namespace Conllu
         /// <summary>
         /// Enhanced dependency graph in the form of a list of head-deprel pairs
         /// </summary>
-        public Dictionary<TokenIdentifier, string> Deps { get; set; } = new Dictionary<TokenIdentifier, string>();
+        public Dictionary<TokenIdentifier, string> Deps { get; set; } = new();
         
         /// <summary>
         /// Any other annotation
@@ -92,14 +92,6 @@ namespace Conllu
         /// Whether the token is an empty node. Utility method for <see cref="Identifier"/>
         /// </summary>
         public bool IsEmptyNode => Identifier.IsEmptyNode;
-
-        public int CompareTo(Token other)
-        {
-            return Identifier.CompareTo(other.Identifier);
-        }
-
-        public override string ToString()
-            => Form;
 
         public Token()
         {
@@ -127,7 +119,7 @@ namespace Conllu
                 Upos = comps[3].ValueOrNull(),
                 Xpos = comps[4].ValueOrNull(),
                 Feats = ParseMultiValueField(comps[5], "=", k => k, v => v),
-                Head = int.TryParse(comps[6], out var head) ? head : (int?)null,
+                Head = int.TryParse(comps[6], out var head) ? head : null,
                 DepRel = comps[7].ValueOrNull(),
                 Deps = ParseMultiValueField(comps[8], ":", k => new TokenIdentifier(k), v => v),
                 Misc = comps[9].ValueOrNull(),
@@ -141,8 +133,8 @@ namespace Conllu
                 depRel = depRelComps[0];
                 t.DepRelSubtype = depRelComps[1];
             }
-            t.DepRelEnum = Enum.TryParse<DependencyRelation>(depRel, true, out var r) ? r : (DependencyRelation?) null;
-            t.UposEnum = Enum.TryParse<PosTag>(t.Upos, true, out var tag) ? tag : (PosTag?) null;
+            t.DepRelEnum = Enum.TryParse<DependencyRelation>(depRel, true, out var r) ? r : null;
+            t.UposEnum = Enum.TryParse<PosTag>(t.Upos, true, out var tag) ? tag : null;
             
             return t;
         }
@@ -180,5 +172,26 @@ namespace Conllu
 
             return result;
         }
+        
+        public int CompareTo(Token other)
+        {
+            return Identifier.CompareTo(other.Identifier);
+        }
+
+        public override int GetHashCode()
+        {
+            return Identifier.GetHashCode();
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is Token t)
+                return Identifier.Equals(t.Identifier);
+            
+            return false;
+        }
+
+        public override string ToString()
+            => Form;
     }
 }

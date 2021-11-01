@@ -10,12 +10,12 @@ namespace Conllu
         /// <summary>
         /// The list of tokens in the sentence
         /// </summary>
-        public List<Token> Tokens { get; } = new List<Token>();
+        public List<Token> Tokens { get; } = new();
 
         /// <summary>
         /// The metadata found in the comments before the sentence
         /// </summary>
-        public Dictionary<string, string> Metadata { get; } = new Dictionary<string, string>();
+        public Dictionary<string, string> Metadata { get; } = new();
         
         public bool IsEmpty() => !Tokens.Any();
 

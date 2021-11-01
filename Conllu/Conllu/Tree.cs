@@ -8,11 +8,11 @@ namespace Conllu
     public class Tree<TVertex, TConnection>: IComparable<Tree<TVertex, TConnection>>
         where TVertex: IComparable<TVertex>
     {
-        public List<Tree<TVertex, TConnection>> Children { get; set; }
+        public List<Tree<TVertex, TConnection>> Children { get; init; }
         
-        public TVertex Value { get; set; }
+        public TVertex Value { get; init; }
         
-        public TConnection Connection { get; set; }
+        public TConnection Connection { get; init; }
 
         public bool IsLeaf => Children.IsNullOrEmpty();
 
@@ -74,6 +74,19 @@ namespace Conllu
         public int CompareTo(Tree<TVertex, TConnection> other)
         {
             return Value.CompareTo(other.Value);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Value.GetHashCode(), Connection.GetHashCode(), Children.GetHashCode());
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is Tree<TVertex, TConnection> t)
+                return Value.Equals(t.Value) && Connection.Equals(t.Connection) && Children.SequenceEqual(t.Children);
+                
+            return false;
         }
 
         public override string ToString()
