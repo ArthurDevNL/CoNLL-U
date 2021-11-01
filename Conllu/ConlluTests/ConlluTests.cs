@@ -222,5 +222,72 @@ namespace ConlluTests
             var ti4 = new TokenIdentifier("4.1");
             Assert.AreEqual(ti4.Serialize(), "4.1");
         }
+
+        [Test]
+        public void TestTreeEquality()
+        {
+            var s1 = new Sentence(new List<Token>
+            {
+                Token.FromLine("1	The	the	DET	DT	Definite=Def|PronType=Art	4	det	_	_"),
+                Token.FromLine("2	quick	quick	ADJ	JJ	Degree=Pos	4	amod	_	_"),
+                Token.FromLine("3	brown	brown	ADJ	JJ	Degree=Pos	4	amod	_	_"),
+                Token.FromLine("4	fox	fox	NOUN	NN	Number=Sing	5	nsubj	_	_"),
+                Token.FromLine("5	jumps	jump	VERB	VBZ	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	0	root	_	_"),
+                Token.FromLine("6	over	over	ADP	IN	_	9	case	_	_"),
+                Token.FromLine("7	the	the	DET	DT	Definite=Def|PronType=Art	9	det	_	_"),
+                Token.FromLine("8	lazy	lazy	ADJ	JJ	Degree=Pos	9	amod	_	_"),
+                Token.FromLine("9	dog	dog	NOUN	NN	Number=Sing	5	nmod	_	SpaceAfter=No"),
+                Token.FromLine("10	.	.	PUNCT	.	_	5	punct	_	_")
+            });
+            
+            var s2 = new Sentence(new List<Token>
+            {
+                Token.FromLine("1	The	the	DET	DT	Definite=Def|PronType=Art	4	det	_	_"),
+                Token.FromLine("2	quick	quick	ADJ	JJ	Degree=Pos	4	amod	_	_"),
+                Token.FromLine("3	brown	brown	ADJ	JJ	Degree=Pos	4	amod	_	_"),
+                Token.FromLine("4	fox	fox	NOUN	NN	Number=Sing	5	nsubj	_	_"),
+                Token.FromLine("5	jumps	jump	VERB	VBZ	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	0	root	_	_"),
+                Token.FromLine("6	over	over	ADP	IN	_	9	case	_	_"),
+                Token.FromLine("7	the	the	DET	DT	Definite=Def|PronType=Art	9	det	_	_"),
+                Token.FromLine("8	lazy	lazy	ADJ	JJ	Degree=Pos	9	amod	_	_"),
+                Token.FromLine("9	dog	dog	NOUN	NN	Number=Sing	5	nmod	_	SpaceAfter=No"),
+                Token.FromLine("10	.	.	PUNCT	.	_	5	punct	_	_")
+            });
+            
+            var s1Tree = s1.AsDependencyTree();
+            var s2Tree = s2.AsDependencyTree();
+            Assert.IsTrue(s1Tree.Equals(s2Tree));
+
+            var t = Token.FromLine("11	test	test	ADJ	JJ	Degree=Pos	9	amod	_	_");
+            s1Tree.AddChild(new Tree<Token, DependencyRelation>(t, DependencyRelation.Cc));
+            Assert.IsFalse(s1Tree.Equals(s2Tree));
+        }
+
+        [Test]
+        public void TestTreeWhere()
+        {
+            var s1 = new Sentence(new List<Token>
+            {
+                Token.FromLine("1	The	the	DET	DT	Definite=Def|PronType=Art	4	det	_	_"),
+                Token.FromLine("2	quick	quick	ADJ	JJ	Degree=Pos	4	amod	_	_"),
+                Token.FromLine("3	brown	brown	ADJ	JJ	Degree=Pos	4	amod	_	_"),
+                Token.FromLine("4	fox	fox	NOUN	NN	Number=Sing	5	nsubj	_	_"),
+                Token.FromLine("5	jumps	jump	VERB	VBZ	Mood=Ind|Number=Sing|Person=3|Tense=Pres|VerbForm=Fin	0	root	_	_"),
+                Token.FromLine("6	over	over	ADP	IN	_	9	case	_	_"),
+                Token.FromLine("7	the	the	DET	DT	Definite=Def|PronType=Art	9	det	_	_"),
+                Token.FromLine("8	lazy	lazy	ADJ	JJ	Degree=Pos	9	amod	_	_"),
+                Token.FromLine("9	dog	dog	NOUN	NN	Number=Sing	5	nmod	_	SpaceAfter=No"),
+                Token.FromLine("10	.	.	PUNCT	.	_	5	punct	_	_")
+            });
+            var s1Tree = s1.AsDependencyTree();
+
+            var over = s1Tree.WhereBfs(x => x.Form == "over").FirstOrDefault();
+            Assert.IsNotNull(over);
+            Assert.AreEqual(over.Value.Id, 6);
+
+            var lazy = s1Tree.WhereDfs(x => x.DepRelEnum == DependencyRelation.Amod).FirstOrDefault();
+            Assert.IsNotNull(lazy);
+            Assert.AreEqual(lazy.Value.Id, 8);
+        }
     }
 }

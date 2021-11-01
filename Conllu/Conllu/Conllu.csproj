@@ -11,7 +11,7 @@
         <RepositoryType>Git</RepositoryType>
         <PackageTags>CONLLU;NLP;PARSER</PackageTags>
         <Title>CoNLL-U</Title>
-        <PackageVersion>1.1</PackageVersion>
+        <PackageVersion>1.1.1</PackageVersion>
     </PropertyGroup>
 
 </Project>
