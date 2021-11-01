@@ -119,7 +119,7 @@ namespace Conllu
                 Upos = comps[3].ValueOrNull(),
                 Xpos = comps[4].ValueOrNull(),
                 Feats = ParseMultiValueField(comps[5], "=", k => k, v => v),
-                Head = int.TryParse(comps[6], out var head) ? head : (int?)null,
+                Head = int.TryParse(comps[6], out var head) ? head : null,
                 DepRel = comps[7].ValueOrNull(),
                 Deps = ParseMultiValueField(comps[8], ":", k => new TokenIdentifier(k), v => v),
                 Misc = comps[9].ValueOrNull(),
@@ -133,8 +133,8 @@ namespace Conllu
                 depRel = depRelComps[0];
                 t.DepRelSubtype = depRelComps[1];
             }
-            t.DepRelEnum = Enum.TryParse<DependencyRelation>(depRel, true, out var r) ? r : (DependencyRelation?) null;
-            t.UposEnum = Enum.TryParse<PosTag>(t.Upos, true, out var tag) ? tag : (PosTag?) null;
+            t.DepRelEnum = Enum.TryParse<DependencyRelation>(depRel, true, out var r) ? r : null;
+            t.UposEnum = Enum.TryParse<PosTag>(t.Upos, true, out var tag) ? tag : null;
             
             return t;
         }
