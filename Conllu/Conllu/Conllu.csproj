@@ -6,7 +6,7 @@
         <Authors>Arthur Hemmer</Authors>
         <Description>A lightweight C# CoNLL-U parser.</Description>
         <Copyright>Arthur Hemmer 2024</Copyright>
-        <PackageLicenseUrl>https://github.com/ArthurDevNL/CoNLL-U/blob/main/LICENSE</PackageLicenseUrl>
+        <LicenseUrl>https://github.com/ArthurDevNL/CoNLL-U/blob/main/LICENSE</LicenseUrl>
         <RepositoryUrl>https://github.com/ArthurDevNL/CoNLL-U</RepositoryUrl>
         <RepositoryType>Git</RepositoryType>
         <PackageTags>CONLLU;NLP;PARSER</PackageTags>

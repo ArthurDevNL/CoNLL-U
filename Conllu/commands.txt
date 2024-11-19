@@ -2,4 +2,4 @@
 dotnet pack --configuration release
 
 # Push to github
-dotnet nuget push ./Conllu/bin/Release/{package-name} --source github
+dotnet nuget push ./Conllu/bin/Release/Conllu.1.1.2.nupkg --source github
