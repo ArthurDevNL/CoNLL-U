@@ -81,7 +81,7 @@ namespace Conllu
             return HashCode.Combine(Value.GetHashCode(), Connection.GetHashCode(), Children.GetHashCode());
         }
 
-        public override bool Equals(object? obj)
+        public override bool Equals(object obj)
         {
             if (obj is Tree<TVertex, TConnection> t)
                 return Value.Equals(t.Value) && Connection.Equals(t.Connection) && Children.SequenceEqual(t.Children);

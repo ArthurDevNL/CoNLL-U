@@ -84,7 +84,7 @@ namespace Conllu
             return Id.CompareTo(other.Id);
         }
         
-        public override bool Equals(object? obj)
+        public override bool Equals(object obj)
         {
             if (obj is TokenIdentifier ti)
                 return CompareTo(ti) == 0;
