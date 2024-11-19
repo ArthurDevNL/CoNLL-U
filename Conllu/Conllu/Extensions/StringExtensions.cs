@@ -5,11 +5,17 @@ namespace Conllu.Extensions
 {
     internal static class StringExtensions
     {
-        public static string? ValueOrNull(this string? x)
+        public static string ValueOrNull(this string x)
             => x == "_" ? null : x;
 
-        public static string ValueOrUnderscore(this string? x)
-            => x?.Trim().IsNullOrEmpty() == false  ? x : "_";
+        public static string ValueOrUnderscore(this string x)
+        {
+            if (x is null)
+                return "_";
+            if (x.Trim().IsNullOrEmpty())
+                return "_";
+            return x;
+        }
 
         public static IEnumerable<string> SplitLines(this string x)
             => x.Split(

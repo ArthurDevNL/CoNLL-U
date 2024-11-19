@@ -183,7 +183,7 @@ namespace Conllu
             return Identifier.GetHashCode();
         }
 
-        public override bool Equals(object? obj)
+        public override bool Equals(object obj)
         {
             if (obj is Token t)
                 return Identifier.Equals(t.Identifier);
